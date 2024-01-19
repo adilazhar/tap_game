@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tap_game/src/tap/application/red_height_service.dart';
 import 'package:tap_game/src/tap/presentation/states/game_states.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 part 'game_state_controller.g.dart';
 
@@ -18,17 +19,22 @@ class GameStateController extends _$GameStateController {
     GameStates.gamewin.name: GameWin(),
   };
 
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   Timer? _timer;
 
   @override
   GameState build() {
+    _audioPlayer.setReleaseMode(ReleaseMode.loop);
+
     ref.listen(redHeightServiceProvider, (_, currentState) {
       if (currentState == 0 || currentState == 100) {
-        state = GameWin();
+        changeStateTo(GameStates.gamewin.name);
       }
     });
 
     ref.listenSelf((_, currentState) {
+      playAudio(currentState);
       if (currentState is GameWin) {
         Timer(const Duration(seconds: 3), () => resetGame());
       }
@@ -39,6 +45,10 @@ class GameStateController extends _$GameStateController {
       }
     });
 
+    ref.onDispose(() async {
+      await _audioPlayer.dispose();
+    });
+
     return MainMenuState();
   }
 
@@ -46,7 +56,7 @@ class GameStateController extends _$GameStateController {
     _timer?.cancel();
     _timer = Timer(const Duration(seconds: 5), () {
       if (state is GameOn) {
-        state = PauseState();
+        changeStateTo(GameStates.pause.name);
       }
     });
   }
@@ -64,15 +74,36 @@ class GameStateController extends _$GameStateController {
 
   void resetGame() {
     ref.read(redHeightServiceProvider.notifier).reset();
-    state = MainMenuState();
+    changeStateTo(GameStates.mainmenu.name);
   }
 
   void resumeGame() {
-    state = GameOn();
+    changeStateTo(GameStates.gameon.name);
   }
 
   void restartGame() {
     ref.read(redHeightServiceProvider.notifier).reset();
-    state = CountdownState();
+    changeStateTo(GameStates.countdown.name);
+  }
+
+  String _getAudioPathForState(GameState state) {
+    if (state is MainMenuState || state is PauseState) {
+      return "background.m4a";
+    } else if (state is CountdownState) {
+      return "123.m4a";
+    } else if (state is GameOn) {
+      return "gameon.m4a";
+    } else if (state is GameWin) {
+      return "win.m4a";
+    } else {
+      throw Exception("Invalid GameState");
+    }
+  }
+
+  Future<void> playAudio(GameState state) async {
+    await _audioPlayer.release();
+    await _audioPlayer.play(
+      AssetSource(_getAudioPathForState(state)),
+    );
   }
 }
