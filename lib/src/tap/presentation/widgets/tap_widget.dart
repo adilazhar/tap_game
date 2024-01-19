@@ -24,49 +24,46 @@ class TapWidget extends ConsumerWidget {
     final redHeight = (redHeightPercent / 100) * totalHeight;
     final blueHeight = totalHeight - redHeight;
 
-    return Scaffold(
-      body: Column(
-        children: [
-          GestureDetector(
-            onTap: isGameOn
-                ? () =>
-                    ref.read(gameStateControllerProvider.notifier).tapOn(true)
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: isGameOn
+              ? () => ref.read(gameStateControllerProvider.notifier).tapOn(true)
+              : null,
+          child: AnimatedContainer(
+            duration: Durations.short4,
+            width: double.infinity,
+            height: redHeight,
+            color: Colors.red,
+            alignment: Alignment.bottomCenter,
+            child: isGameWonByRed
+                ? const Text(
+                    'RED WON',
+                    style: TextStyle(fontSize: 50, color: Colors.white),
+                  )
                 : null,
-            child: AnimatedContainer(
-              duration: Durations.short4,
-              width: double.infinity,
-              height: redHeight,
-              color: Colors.red,
-              alignment: Alignment.bottomCenter,
-              child: isGameWonByRed
-                  ? const Text(
-                      'RED WON',
-                      style: TextStyle(fontSize: 50, color: Colors.white),
-                    )
-                  : null,
-            ),
           ),
-          GestureDetector(
-            onTap: isGameOn
-                ? () =>
-                    ref.read(gameStateControllerProvider.notifier).tapOn(false)
+        ),
+        GestureDetector(
+          onTap: isGameOn
+              ? () =>
+                  ref.read(gameStateControllerProvider.notifier).tapOn(false)
+              : null,
+          child: AnimatedContainer(
+            duration: Durations.short4,
+            width: double.infinity,
+            height: blueHeight,
+            color: Colors.blue,
+            alignment: Alignment.topCenter,
+            child: isGameWonByBlue
+                ? const Text(
+                    'BLUE WON',
+                    style: TextStyle(fontSize: 50, color: Colors.white),
+                  )
                 : null,
-            child: AnimatedContainer(
-              duration: Durations.short4,
-              width: double.infinity,
-              height: blueHeight,
-              color: Colors.blue,
-              alignment: Alignment.topCenter,
-              child: isGameWonByBlue
-                  ? const Text(
-                      'BLUE WON',
-                      style: TextStyle(fontSize: 50, color: Colors.white),
-                    )
-                  : null,
-            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
