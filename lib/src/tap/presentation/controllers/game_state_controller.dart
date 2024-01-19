@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tap_game/src/tap/application/red_height_service.dart';
 import 'package:tap_game/src/tap/presentation/states/game_states.dart';
@@ -10,7 +11,8 @@ part 'game_state_controller.g.dart';
 enum GameStates { mainmenu, countdown, pause, gameon, gamewin }
 
 @riverpod
-class GameStateController extends _$GameStateController {
+class GameStateController extends _$GameStateController
+    with WidgetsBindingObserver {
   final Map<String, GameState> _gameStates = {
     GameStates.mainmenu.name: MainMenuState(),
     GameStates.countdown.name: CountdownState(),
@@ -25,6 +27,7 @@ class GameStateController extends _$GameStateController {
 
   @override
   GameState build() {
+    WidgetsBinding.instance.addObserver(this);
     _audioPlayer.setReleaseMode(ReleaseMode.loop);
 
     ref.listen(redHeightServiceProvider, (_, currentState) {
@@ -50,6 +53,19 @@ class GameStateController extends _$GameStateController {
     });
 
     return MainMenuState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      print('Paused');
+      _audioPlayer.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      print('Resumed');
+
+      _audioPlayer.resume();
+    }
   }
 
   void _resetTimer() {
