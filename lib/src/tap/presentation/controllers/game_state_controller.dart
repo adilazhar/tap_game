@@ -18,6 +18,8 @@ class GameStateController extends _$GameStateController {
     GameStates.gamewin.name: GameWin(),
   };
 
+  Timer? _timer;
+
   @override
   GameState build() {
     ref.listen(redHeightServiceProvider, (_, currentState) {
@@ -30,9 +32,23 @@ class GameStateController extends _$GameStateController {
       if (currentState is GameWin) {
         Timer(const Duration(seconds: 3), () => resetGame());
       }
+      if (currentState is GameOn) {
+        _resetTimer();
+      } else {
+        _timer?.cancel();
+      }
     });
 
     return MainMenuState();
+  }
+
+  void _resetTimer() {
+    _timer?.cancel();
+    _timer = Timer(const Duration(seconds: 5), () {
+      if (state is GameOn) {
+        state = PauseState();
+      }
+    });
   }
 
   void changeStateTo(String stateName) {
@@ -41,6 +57,9 @@ class GameStateController extends _$GameStateController {
 
   void tapOn(bool isRed) {
     ref.read(redHeightServiceProvider.notifier).tapOn(isRed);
+    if (state is GameOn) {
+      _resetTimer();
+    }
   }
 
   void resetGame() {

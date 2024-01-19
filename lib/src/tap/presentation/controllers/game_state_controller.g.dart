@@ -7,7 +7,7 @@ part of 'game_state_controller.dart';
 // **************************************************************************
 
 String _$gameStateControllerHash() =>
-    r'592d83d6327639071501f1c2e748ae31b95180d1';
+    r'd0609c89ba4329baccd33b4b39d429ea4237c3f1';
 
 /// See also [GameStateController].
 @ProviderFor(GameStateController)
