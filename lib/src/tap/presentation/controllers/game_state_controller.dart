@@ -59,11 +59,8 @@ class GameStateController extends _$GameStateController
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused) {
-      print('Paused');
       _audioPlayer.pause();
     } else if (state == AppLifecycleState.resumed) {
-      print('Resumed');
-
       _audioPlayer.resume();
     }
   }
