@@ -28,6 +28,6 @@ class AppSettingNotifier extends _$AppSettingNotifier {
 
   Future<void> updateAudioOn(bool value) async {
     state = AsyncValue.data(state.value!.copyWith(isAudioOn: value));
-    await _appSettingRepo.saveData(AppSettingHelper.isDarkMode, value);
+    await _appSettingRepo.saveData(AppSettingHelper.isAudioOn, value);
   }
 }

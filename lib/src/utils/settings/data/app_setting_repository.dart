@@ -50,6 +50,7 @@ class AppSettingRepository {
 @Riverpod(keepAlive: true)
 FutureOr<AppSettingRepository> appSettingRepository(
     AppSettingRepositoryRef ref) async {
+  await Future.delayed(const Duration(seconds: 3));
   final pref = await ref.watch(sharedPreferencesProvider.future);
   return AppSettingRepository(pref);
 }

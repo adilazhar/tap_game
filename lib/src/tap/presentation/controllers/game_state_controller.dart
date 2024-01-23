@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tap_game/src/tap/application/red_height_service.dart';
 import 'package:tap_game/src/tap/presentation/states/game_states.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:tap_game/src/utils/settings/application/app_setting_notifier.dart';
 
 part 'game_state_controller.g.dart';
 
@@ -23,10 +24,16 @@ class GameStateController extends _$GameStateController
 
   final AudioPlayer _audioPlayer = AudioPlayer();
 
+  late bool _toPlayAudio;
+
   Timer? _timer;
 
   @override
   GameState build() {
+    _toPlayAudio = ref
+        .watch(appSettingNotifierProvider)
+        .whenData((value) => value.isAudioOn)
+        .value!;
     WidgetsBinding.instance.addObserver(this);
     _audioPlayer.setReleaseMode(ReleaseMode.loop);
 
@@ -37,7 +44,11 @@ class GameStateController extends _$GameStateController
     });
 
     ref.listenSelf((_, currentState) {
-      playAudio(currentState);
+      if (_toPlayAudio) {
+        playAudio(currentState);
+      } else {
+        _audioPlayer.release();
+      }
       if (currentState is GameWin) {
         Timer(const Duration(seconds: 3), () => resetGame());
       }
@@ -46,10 +57,6 @@ class GameStateController extends _$GameStateController
       } else {
         _timer?.cancel();
       }
-    });
-
-    ref.onDispose(() async {
-      await _audioPlayer.dispose();
     });
 
     return MainMenuState();
