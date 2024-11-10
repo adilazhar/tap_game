@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tap_game/src/tap/home_screen.dart';
-import 'package:tap_game/src/utils/settings/application/app_setting_notifier.dart';
+import 'package:tap_game/src/utils/providers/shared_preferences_provider.dart';
 
-import 'package:tap_game/src/utils/splash_screen/splash_screen.dart';
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  runApp(const ProviderScope(child: MyApp()));
+
+  final pref = await SharedPreferences.getInstance();
+  runApp(ProviderScope(overrides: [
+    sharedPreferencesProvider.overrideWithValue(pref),
+  ], child: const MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -17,8 +20,6 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(appSettingNotifierProvider);
-
     return MaterialApp(
       title: 'Tap Game',
       debugShowCheckedModeBanner: false,
@@ -26,13 +27,7 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: settings.when(
-        data: (data) {
-          return const HomeScreen();
-        },
-        error: (error, _) => null,
-        loading: () => const SplashScreen(),
-      ),
+      home: const HomeScreen(),
     );
   }
 }

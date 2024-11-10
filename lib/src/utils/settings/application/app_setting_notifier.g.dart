@@ -7,12 +7,12 @@ part of 'app_setting_notifier.dart';
 // **************************************************************************
 
 String _$appSettingNotifierHash() =>
-    r'075fc82de22c4447941949f025873eef755c8bb0';
+    r'6b5b4659bfd72f321cd27648c2c4b1e0ce54f4bd';
 
 /// See also [AppSettingNotifier].
 @ProviderFor(AppSettingNotifier)
 final appSettingNotifierProvider =
-    AsyncNotifierProvider<AppSettingNotifier, AppSetting>.internal(
+    NotifierProvider<AppSettingNotifier, AppSetting>.internal(
   AppSettingNotifier.new,
   name: r'appSettingNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final appSettingNotifierProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$AppSettingNotifier = AsyncNotifier<AppSetting>;
+typedef _$AppSettingNotifier = Notifier<AppSetting>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

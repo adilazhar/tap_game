@@ -10,24 +10,24 @@ class AppSettingNotifier extends _$AppSettingNotifier {
   late final AppSettingRepository _appSettingRepo;
 
   @override
-  FutureOr<AppSetting> build() async {
-    _appSettingRepo = await ref.watch(appSettingRepositoryProvider.future);
-    return await loadSettings();
+  AppSetting build() {
+    _appSettingRepo = ref.watch(appSettingRepositoryProvider);
+    return loadSettings();
   }
 
-  Future<AppSetting> loadSettings() async {
-    return await _appSettingRepo.loadSettings();
+  AppSetting loadSettings() {
+    return _appSettingRepo.loadSettings();
   }
 
   Future<void> updateDarkMode(
     bool value,
   ) async {
-    state = AsyncValue.data(state.value!.copyWith(isDarkMode: value));
+    state = state..copyWith(isDarkMode: value);
     await _appSettingRepo.saveData(AppSettingHelper.isDarkMode, value);
   }
 
   Future<void> updateAudioOn(bool value) async {
-    state = AsyncValue.data(state.value!.copyWith(isAudioOn: value));
+    state = state.copyWith(isAudioOn: value);
     await _appSettingRepo.saveData(AppSettingHelper.isAudioOn, value);
   }
 }

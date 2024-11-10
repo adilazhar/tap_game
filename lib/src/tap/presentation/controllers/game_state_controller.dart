@@ -30,10 +30,9 @@ class GameStateController extends _$GameStateController
 
   @override
   GameState build() {
-    _toPlayAudio = ref
-        .watch(appSettingNotifierProvider)
-        .whenData((value) => value.isAudioOn)
-        .value!;
+    _toPlayAudio = ref.watch(appSettingNotifierProvider).isAudioOn;
+    // .whenData((value) => value.isAudioOn)
+    // .value!;
     WidgetsBinding.instance.addObserver(this);
     _audioPlayer.setReleaseMode(ReleaseMode.loop);
 

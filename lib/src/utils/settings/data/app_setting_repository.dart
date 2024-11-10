@@ -11,7 +11,7 @@ class AppSettingRepository {
 
   AppSettingRepository(this._prefs);
 
-  Future<AppSetting> loadSettings() async {
+  AppSetting loadSettings() {
     bool? isDarkMode = _prefs.getBool(AppSettingHelper.isDarkMode);
     bool? isAudioOn = _prefs.getBool(AppSettingHelper.isAudioOn);
     return AppSetting(
@@ -48,9 +48,7 @@ class AppSettingRepository {
 }
 
 @Riverpod(keepAlive: true)
-FutureOr<AppSettingRepository> appSettingRepository(
-    AppSettingRepositoryRef ref) async {
-  await Future.delayed(const Duration(seconds: 3));
-  final pref = await ref.watch(sharedPreferencesProvider.future);
+AppSettingRepository appSettingRepository(AppSettingRepositoryRef ref) {
+  final pref = ref.watch(sharedPreferencesProvider);
   return AppSettingRepository(pref);
 }

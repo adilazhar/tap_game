@@ -8,9 +8,9 @@ class VolumeButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAudioOn = ref.watch(
-        appSettingNotifierProvider.select((value) => value.value!.isAudioOn));
-        
+    final isAudioOn = ref
+        .watch(appSettingNotifierProvider.select((value) => value.isAudioOn));
+
     return MyIconButton(
       onPressed: () => ref
           .read(appSettingNotifierProvider.notifier)
