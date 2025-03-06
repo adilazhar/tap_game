@@ -30,22 +30,7 @@ Tap Game is an engaging and fast-paced two-player mobile game where players comp
 
 ## Installation
 
-1. Clone the repository
-   ```
-   git clone https://github.com/adilazhar/tap-game.git
-   ```
-2. Navigate to the project directory
-   ```
-   cd tap-game
-   ```
-3. Get all dependencies
-   ```
-   flutter pub get
-   ```
-4. Run the app on your preferred device
-   ```
-   flutter run
-   ```
+Replace your lib folder and pubspec.yaml file with the folder and file provided respectively.
 
 ## How to Play
 
