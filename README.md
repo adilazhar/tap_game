@@ -6,7 +6,7 @@ Tap Game is an engaging and fast-paced two-player mobile game where players comp
 
 ## Demo
 
-[Add your demo video/GIF here]
+https://github.com/user-attachments/assets/653e1093-04db-4abc-928f-41397148abfb
 
 ## Features
 
@@ -27,7 +27,7 @@ Tap Game is an engaging and fast-paced two-player mobile game where players comp
 - Dart SDK (3.2.3 or higher)
 - Android Studio / VS Code
 - Git
-
+  
 ## Installation
 
 Replace your lib folder and pubspec.yaml file with the folder and file provided respectively.
